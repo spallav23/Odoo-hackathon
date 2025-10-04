@@ -1,0 +1,23 @@
+# Django framework
+django==5.2.7
+
+# Django REST Framework
+djangorestframework==3.20.0
+
+# MySQL connector
+mysqlclient==2.3.1
+
+# JWT Authentication
+djangorestframework-simplejwt==5.2.1
+
+# Environment variables
+python-dotenv==1.1.1
+
+# HTTP requests for external APIs (country/currency)
+requests==2.31.0
+
+# CORS headers for React frontend integration
+django-cors-headers==4.3.0
+
+# DRF Filtering
+django-filter==23.2

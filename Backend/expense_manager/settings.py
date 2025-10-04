@@ -27,7 +27,11 @@ SECRET_KEY = "django-insecure-%4wai5yeod6*ig5oz^ox6@!c273@mb5xibq8tbf-)!p*42q@9#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'bc19c707868d.ngrok-free.app'  # <-- Add this line
+]
 
 
 # Application definition
@@ -126,7 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
