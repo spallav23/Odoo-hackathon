@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showNotification } from '../../store/uiSlice';
-import { loginSuccess } from '../../store/authSlice';
+import { loginUser } from '../../store/authSlice';
 import { useNavigate } from 'react-router-dom';
 import apiClient from '../../utils/api';
 import './LoginPage.css';
@@ -30,14 +30,14 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await apiClient.post('/api/token/', {
-        username:"leo", 
+        username:"Pallav", 
         password, 
       });
 
       const token = response.data.access; 
 
       if (token) {
-        dispatch(loginSuccess({ token,email }));
+        dispatch(loginUser({ token,email }));
         dispatch(showNotification({ type: 'success', message: 'Login successful! Welcome.' }));
         navigate('/dashboard');
       }

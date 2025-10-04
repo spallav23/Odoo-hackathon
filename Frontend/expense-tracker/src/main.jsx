@@ -59,7 +59,7 @@ const router = createBrowserRouter([
       },
       {
         path:'admin',
-        element:<ProtectedRoute children={<AdminPage/>} allowedRoles={'Admin'} />
+        element:<ProtectedRoute children={<AdminPage/>} allowedRoles={'admin'} />
         
       },
       {

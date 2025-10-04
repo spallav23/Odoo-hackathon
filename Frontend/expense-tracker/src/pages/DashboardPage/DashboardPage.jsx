@@ -20,15 +20,6 @@ const CheckIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" heigh
 const XIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>;
 
 
-const userStats = {
-  total: '₹89,450.00',
-  approved: '₹75,200.00',
-  pending: '₹11,250.00',
-  rejected: '₹3,000.00'
-};
-
-
-
 const DashboardPage = () => {
   const [userRole, setUserRole] = useState('manager'); 
   const [pendingApprovals, setpendingApprovals] = useState([])
@@ -44,8 +35,18 @@ const DashboardPage = () => {
   const loaddata =async()=>{
     try {
     const response = await apiClient.get('/api/expenses/');
-    setpendingApprovals(response.data);
-    setrecentExpenses(response.data);
+    // Suppose response.data is your expenses array
+    const expenses = response.data;
+
+    // Split by status
+    const pending = expenses.filter(exp => exp.status === "pending");
+    // const approved = expenses.filter(exp => exp.status === "approved");
+    // const rejected = expenses.filter(exp => exp.status === "rejected");
+
+    // Set state
+    setpendingApprovals(pending);      // Pending approvals
+    setrecentExpenses(expenses);       // All expenses
+
     const state = await apiClient.get('/api/expenses/stats/');
     if(state?.data?.total){
       setuserStats(state.data);
@@ -64,6 +65,32 @@ const DashboardPage = () => {
     
     loaddata();
   }, [isLoading])
+  // Inside DashboardPage component
+
+    const handleApprove = async (id) => {
+      try {
+        await apiClient.post(`/expenses/${id}/approve/`);
+        dispatch(showNotification({ type: 'success', message: 'Expense approved successfully!' }));
+        // Reload data after approval
+        loaddata();
+      } catch (error) {
+        const errorMessage = error.response?.data?.detail || 'Failed to approve expense';
+        dispatch(showNotification({ type: 'error', message: errorMessage }));
+      }
+    };
+
+    const handleReject = async (id) => {
+      try {
+        await apiClient.post(`/expenses/${id}/reject/`);
+        dispatch(showNotification({ type: 'success', message: 'Expense rejected successfully!' }));
+        // Reload data after rejection
+        loaddata();
+      } catch (error) {
+        const errorMessage = error.response?.data?.detail || 'Failed to reject expense';
+        dispatch(showNotification({ type: 'error', message: errorMessage }));
+      }
+    };
+
   
   return (
     <div className="dashboard-page">
@@ -82,7 +109,7 @@ const DashboardPage = () => {
         <StatCard title="Pending" value={userStats.pending} color="#f5a623" icon={'...'} />
         <StatCard title="Rejected" value={userStats.rejected} color="#d0021b" icon={'✕'} />
       </section>
-      {userRole === 'manager' && (
+      {userRole != 'employee' && (
         <section className="dashboard-section">
           <h2>Pending Approvals</h2>
           <div className="approval-list">
@@ -95,8 +122,8 @@ const DashboardPage = () => {
                 <div className="card-details">
                   <span className="expense-amount">{item.currency}{item.amount.toLocaleString()}</span>
                    <div className="action-buttons">
-                    <button className="reject-button"><XIcon/></button>
-                    <button className="approve-button"><CheckIcon/></button>
+                    <button className="reject-button" onClick={() => handleReject(item.id)}><XIcon/></button>
+                    <button className="approve-button" onClick={() => handleApprove(item.id)}><CheckIcon/></button>
                   </div>
                 </div>
               </div>

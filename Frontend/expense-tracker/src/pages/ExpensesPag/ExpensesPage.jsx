@@ -2,11 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
 import './ExpensesPage.css';
 
-// --- Helper Icons (Unchanged) ---
 const ArrowUpIcon = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 19V5M5 12l7-7 7 7"/></svg>;
 const ArrowDownIcon = () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>;
 
-// --- Mock Data (Slightly adjusted for the library) ---
 const COLORS = ['#4a90e2', '#50e3c2', '#f5a623', '#bd10e0', '#9013fe'];
 
 const cfoData = {
@@ -22,7 +20,7 @@ const cfoData = {
         { name: 'Engineering', Expenses: 430000 },
         { name: 'Marketing', Expenses: 215000 },
     ],
-    allExpenses: [ /* Unchanged */
+    allExpenses: [
         { id: 1, name: 'Rohan Sharma', team: 'Sales', date: '2025-10-03', category: 'Client Lunch', amount: 4500 },
         { id: 2, name: 'Anjali Desai', team: 'Engineering', date: '2025-10-02', category: 'Travel', amount: 6750 },
         { id: 3, name: 'Vikram Singh', team: 'Sales', date: '2025-09-28', category: 'Software', amount: 12000 },
@@ -44,8 +42,6 @@ const managerData = {
     ],
     allExpenses: cfoData.allExpenses.slice(0,3),
 };
-
-// --- Main Expenses Page Component ---
 const ExpensesPage = () => {
   const [userRole, setUserRole] = useState('cfo');
   const [sortConfig, setSortConfig] = useState({ key: 'date', direction: 'descending' });

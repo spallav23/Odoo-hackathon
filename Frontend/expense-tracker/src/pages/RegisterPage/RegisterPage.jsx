@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showNotification } from '../../store/uiSlice';
 import './RegisterPage.css';
-import { loginSuccess } from '../../store/authSlice';
+import { loginUser } from '../../store/authSlice';
 import apiClient from '../../utils/api'
 
 const ProgressStep = ({ stepNumber, label, isActive }) => (
@@ -52,7 +52,7 @@ const RegisterPage = () => {
 
       if (token) {
         const email = formData.adminEmail
-        dispatch(loginSuccess({ token,email }));
+        dispatch(loginUser({ token,email }));
         dispatch(showNotification({ type: 'success', message: 'Register successful! Welcome.' }));
         navigate('/dashboard');
       }
