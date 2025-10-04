@@ -1,20 +1,11 @@
 /* --- THEME & GLOBAL STYLES --- */
-:root {
-  --primary-blue: #4a90e2;
-  --teal-accent: #50e3c2;
-  --dark-blue: #0d253f;
-  --text-primary: #ffffff;
-  --text-secondary: #adb5bd;
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --hover-bg: rgba(255, 255, 255, 0.15);
-}
+
 
 /* --- MAIN LAYOUT & NEW BACKGROUND --- */
 .expenses-page-new {
   padding: 2rem;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0d253f 0%, #01040f 100%);
+  background: linear-gradient(135deg, #d8d8d8 0%, #e6e6e8 100%);
   color: var(--text-primary);
   animation: fadeIn 0.6s ease-out;
 }

@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import { initializeAuth } from './store/authSlice.js';
 import './index.css'
 import App from './App.jsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
@@ -17,6 +18,8 @@ import DashboardPage from './pages/DashboardPage/DashboardPage.jsx';
 import AddExpensePage from './pages/AddExpensePage/AddExpensePage.jsx';
 import AdminPage from './pages/AdminPage/AdminPage.jsx';
 import ExpensesPage from './pages/ExpensesPag/ExpensesPage.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+
 const router = createBrowserRouter([
   {
     path:'/',
@@ -43,22 +46,22 @@ const router = createBrowserRouter([
       },
       {
         path:'dashboard',
-        element:<DashboardPage/>
+        element:<ProtectedRoute children={<DashboardPage/>} />,
         
       },
       {
         path:'add-expense',
-        element:<AddExpensePage/>
+        element:<ProtectedRoute children={<AddExpensePage/>} />
         
       },
       {
         path:'expenses',
-        element:<ExpensesPage/>
+        element:<ProtectedRoute children={<ExpensesPage/>} />
         
       },
       {
         path:'admin',
-        element:<AdminPage/>
+        element:<ProtectedRoute children={<AdminPage/>} allowedRoles={'Admin'} />
         
       },
       {
@@ -68,7 +71,7 @@ const router = createBrowserRouter([
     ]
   }
 ])
-
+store.dispatch(initializeAuth());
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>

@@ -1,10 +1,26 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { showNotification } from '../../store/uiSlice';
 import './LoginPage.css';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  if (isLoading) {
+    return <div className="loading-fullscreen">Loading...</div>;
+  }
+  if (isAuthenticated) {
+      dispatch(showNotification({
+        type: 'success',
+        message: 'Alread Loged in',
+      }));
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();

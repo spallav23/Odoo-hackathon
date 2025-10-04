@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { showNotification } from '../../store/uiSlice';
 import './RegisterPage.css';
 
 // Reusable component for each step's progress indicator
@@ -20,8 +24,9 @@ const RegisterPage = () => {
     adminEmail: '',
     password: '',
   });
+  
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -43,7 +48,18 @@ const RegisterPage = () => {
     // On success, navigate to login or dashboard
     navigate('/login');
   };
-
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
+    if (isLoading) {
+      return <div className="loading-fullscreen">Loading...</div>;
+    }
+    if (isAuthenticated) {
+      dispatch(showNotification({
+        type: 'success',
+        message: 'Alread Loged in',
+      }));
+      
+      return <Navigate to="/dashboard" replace />;
+    }
   return (
     <div className="register-page">
       <div className="register-container">
