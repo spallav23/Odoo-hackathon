@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './DashboardPage.css';
+import apiClient from '../../utils/api';
+import { useDispatch } from 'react-redux';
+import { showNotification } from '../../store/uiSlice';
+import { useNavigate } from 'react-router-dom';
 
 // --- Helper Components & Icons (Inlined for simplicity) ---
 
@@ -26,30 +30,54 @@ const userStats = {
   rejected: '₹3,000.00'
 };
 
-const pendingApprovals = [
-  { id: 1, employeeName: 'Rohan Sharma', date: '2025-10-03', category: 'Client Lunch', amount: 4500, currency: '₹' },
-  { id: 2, employeeName: 'Anjali Desai', date: '2025-10-02', category: 'Travel', amount: 6750, currency: '₹' },
-  { id: 3, employeeName: 'Vikram Singh', date: '2025-09-28', category: 'Software', amount: 12000, currency: '$' },
-];
+// const pendingApprovals = [
+//   { id: 1, employeeName: 'Rohan Sharma', date: '2025-10-03', category: 'Client Lunch', amount: 4500, currency: '₹' },
+//   { id: 2, employeeName: 'Anjali Desai', date: '2025-10-02', category: 'Travel', amount: 6750, currency: '₹' },
+//   { id: 3, employeeName: 'Vikram Singh', date: '2025-09-28', category: 'Software', amount: 12000, currency: '$' },
+// ];
 
-const recentExpenses = [
+// const recentExpenses = [
+//   { id: 101, date: '2025-10-01', category: 'Office Supplies', amount: 2500, status: 'Approved' },
+//   { id: 102, date: '2025-10-03', category: 'Team Dinner', amount: 11250, status: 'Pending' },
+//   { id: 103, date: '2025-09-25', category: 'Cab Fare', amount: 1500, status: 'Approved' },
+//   { id: 104, date: '2025-09-22', category: 'Internet Bill', amount: 3000, status: 'Rejected' },
+// ];
+
+
+const DashboardPage = () => {
+  const [userRole, setUserRole] = useState('manager'); 
+  const [pendingApprovals, setpendingApprovals] = useState([
+    { id: 1, employeeName: 'Rohan Sharma', date: '2025-10-03', category: 'Client Lunch', amount: 4500, currency: '₹' },
+    { id: 2, employeeName: 'Anjali Desai', date: '2025-10-02', category: 'Travel', amount: 6750, currency: '₹' },
+    { id: 3, employeeName: 'Vikram Singh', date: '2025-09-28', category: 'Software', amount: 12000, currency: '$' },
+  ])
+  const [recentExpenses, setrecentExpenses] = useState([
   { id: 101, date: '2025-10-01', category: 'Office Supplies', amount: 2500, status: 'Approved' },
   { id: 102, date: '2025-10-03', category: 'Team Dinner', amount: 11250, status: 'Pending' },
   { id: 103, date: '2025-09-25', category: 'Cab Fare', amount: 1500, status: 'Approved' },
   { id: 104, date: '2025-09-22', category: 'Internet Bill', amount: 3000, status: 'Rejected' },
-];
-
-
-const DashboardPage = () => {
-  // --- STATE TO SIMULATE USER ROLE ---
-  // In a real app, this would come from your auth context or Redux store.
-  const [userRole, setUserRole] = useState('manager'); 
-  // Change to 'employee' to see the other view
-
+])
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const loaddata =async()=>{
+    try {
+    const response = await apiClient.get('/api/expenses/');
+    // setpendingApprovals(response.data);
+    // setrecentExpenses(response.data);
+  } catch (error) {
+    console.error("Failed to submit expense:", error);
+    const errorMessage = error.response?.data?.detail || 'An unexpected error occurred.';
+    
+    dispatch(showNotification({ type: 'error', message: `Failed to Load Data: ${errorMessage}` }));
+  }
+  }
+  useEffect(() => {
+    loaddata();
+  }, [])
+  
   return (
     <div className="dashboard-page">
 
-      {/* --- FOR DEMO ONLY: Role switcher --- */}
       <div className="role-switcher">
         <strong>Demo:</strong>
         <button onClick={() => setUserRole('manager')} className={userRole === 'manager' ? 'active' : ''}>Manager View</button>

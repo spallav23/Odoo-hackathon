@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showNotification } from '../../store/uiSlice';
+import apiClient from '../../utils/api'
 import './AddExpensePage.css';
 
 // --- Helper Icons (Inlined for simplicity) ---
@@ -49,13 +50,28 @@ const AddExpensePage = () => {
     }
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("Submitting Expense:", { ...formData, receipt: receiptFile });
-    // In a real app, you would send this to your API
+    try {
+    const response = await apiClient.post('/api/expenses/', {
+      amount: formData.amount,
+      description: formData.description,
+      category: formData.category,
+      date: formData.date, 
+      currency:formData.currency,
+    });
+    console.log('Expense submitted successfully:', response.data);
+    dispatch(showNotification({ type: 'success', message: 'Expense submitted!' }));
+    navigate('/dashboard');
+
+  } catch (error) {
+    console.error("Failed to submit expense:", error);
+    const errorMessage = error.response?.data?.detail || 'An unexpected error occurred.';
     
-    dispatch(showNotification({ type: 'success', message: 'Expense submitted successfully!' }));
-    navigate('/dashboard'); // Navigate back to the dashboard
+    dispatch(showNotification({ type: 'error', message: `Submission Failed: ${errorMessage}` }));
+  }
+    // dispatch(showNotification({ type: 'success', message: 'Expense submitted successfully!' }));
+    // navigate('/dashboard'); 
   };
 
   return (

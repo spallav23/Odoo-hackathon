@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status, generics
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.serializers import ModelSerializer, CharField
@@ -19,21 +19,39 @@ from .permissions import IsAdmin, IsManager, IsEmployee
 # User, Company, EmployeeManager
 # -------------------
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated, IsAdmin]  # Only admin can manage users
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == "admin":
+            return User.objects.filter(company=user.company)
+        return User.objects.none()
+
 
 class CompanyViewSet(viewsets.ModelViewSet):
-    queryset = Company.objects.all()
     serializer_class = CompanySerializer
     permission_classes = [IsAuthenticated, IsAdmin]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == "admin":
+            return Company.objects.filter(id=user.company.id)
+        return Company.objects.none()
 
 
 class EmployeeManagerViewSet(viewsets.ModelViewSet):
     queryset = EmployeeManager.objects.all()
     serializer_class = EmployeeManagerSerializer
     permission_classes = [IsAuthenticated, IsAdmin]
+
+    @action(detail=False, methods=["get"])
+    def team(self, request):
+        """Get employees under a manager"""
+        manager = request.user
+        employees = EmployeeManager.objects.filter(manager=manager)
+        serializer = self.get_serializer(employees, many=True)
+        return Response(serializer.data)
 
 
 # -------------------
@@ -130,12 +148,16 @@ class SignupSerializer(ModelSerializer):
         fields = ("username", "password", "email", "role", "company")
 
     def create(self, validated_data):
+        company = validated_data.get("company")
+        if not company and validated_data.get("role") == "admin":
+            company = Company.objects.create(name=f"{validated_data['username']}'s Company")
+
         user = User.objects.create_user(
             username=validated_data["username"],
             email=validated_data.get("email"),
             password=validated_data["password"],
             role=validated_data.get("role", "employee"),
-            company=validated_data.get("company", None),
+            company=company,
         )
         return user
 
@@ -144,3 +166,21 @@ class SignupView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = SignupSerializer
     permission_classes = [IsAdminUser]  # Only admin can create users
+
+
+# -------------------
+# Change Password API
+# -------------------
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    user = request.user
+    old_password = request.data.get("old_password")
+    new_password = request.data.get("new_password")
+
+    if not user.check_password(old_password):
+        return Response({"detail": "Old password incorrect"}, status=400)
+
+    user.set_password(new_password)
+    user.save()
+    return Response({"detail": "Password updated successfully"})

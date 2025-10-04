@@ -39,7 +39,7 @@ const LoginPage = () => {
       if (token) {
         dispatch(loginSuccess({ token }));
         dispatch(showNotification({ type: 'success', message: 'Login successful! Welcome.' }));
-        navigate('/app');
+        navigate('/dashboard');
       }
 
     } catch (error) {
