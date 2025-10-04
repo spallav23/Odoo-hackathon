@@ -15,11 +15,11 @@ const getUserFromToken = (token) => {
 };
 
 const initialState = {
-  token: 'null',
-  isAuthenticated: true,
-  user: 'null',
-  isLoading: false,
-  role:'Admin' // To show a loader while checking for the cookie
+  token: null,
+  isAuthenticated: false,
+  user: null,
+  isLoading: true,
+  role:null, // To show a loader while checking for the cookie
 };
 
 const authSlice = createSlice({

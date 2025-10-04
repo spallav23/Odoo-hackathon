@@ -4,6 +4,9 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showNotification } from '../../store/uiSlice';
+import { loginSuccess } from '../../store/authSlice';
+import { useNavigate } from 'react-router-dom';
+import apiClient from '../../utils/api';
 import './LoginPage.css';
 
 const LoginPage = () => {
@@ -11,6 +14,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   if (isLoading) {
     return <div className="loading-fullscreen">Loading...</div>;
   }
@@ -22,9 +26,26 @@ const LoginPage = () => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Handle login logic here
+    try {
+      const response = await apiClient.post('/api/token/', {
+        username:"Pallav", 
+        password, 
+      });
+
+      const token = response.data.access; 
+
+      if (token) {
+        dispatch(loginSuccess({ token }));
+        dispatch(showNotification({ type: 'success', message: 'Login successful! Welcome.' }));
+        navigate('/app');
+      }
+
+    } catch (error) {
+      console.error("Login failed:", error);
+      dispatch(showNotification({ type: 'error', message: 'Login failed. Please check your credentials.' }));
+    }
     console.log('Logging in with:', email, password);
   };
 
