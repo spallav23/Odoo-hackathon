@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink ,useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../../store/authSlice';
 import './Navbar.css'; 
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -12,11 +16,18 @@ const Navbar = () => {
   const closeMenu = () => {
     setIsMenuOpen(false);
   }
+  const handleLogout = () => {
+    dispatch(logout());
+    closeMenu();
+    navigate('/');
+  };
 
+  // Helper to get user initial
+  const userInitial = user?.name?.charAt(0) || 'U';
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <Link to="/dashboard" className="navbar-logo" onClick={closeMenu}>
+        <Link to="/" className="navbar-logo" onClick={closeMenu}>
           {/* SVG inspired by the first logo concept */}
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="10" stroke="#007BFF" strokeWidth="2"/>
@@ -46,25 +57,43 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/reports" className="nav-link" onClick={closeMenu}>
-              Reports
+            <NavLink to="/admin" className="nav-link" onClick={closeMenu}>
+              Admin
             </NavLink>
           </li>
-          <li className="nav-item">
-            <NavLink to="/settings" className="nav-link" onClick={closeMenu}>
-              Settings
-            </NavLink>
-          </li>
-           <li className="nav-item-mobile">
-            <Link to="/logout" className="nav-link-button" onClick={closeMenu}>
-              Logout
-            </Link>
+           
+          <li className="nav-item-mobile">
+            {isAuthenticated ? (
+              <button className="nav-link-button" onClick={handleLogout}>
+                Logout
+              </button>
+            ) : (
+              <div className="mobile-auth-buttons">
+                <Link to="/login" className="nav-link-button login" onClick={closeMenu}>Login</Link>
+                <Link to="/register" className="nav-link-button register" onClick={closeMenu}>Sign Up</Link>
+              </div>
+            )}
           </li>
         </ul>
         
-        <Link to="/logout" className="nav-button-desktop" onClick={closeMenu}>
-          Logout
-        </Link>
+        <div className="nav-auth-desktop">
+          {isAuthenticated ? (
+            <div className="user-menu-desktop">
+              <div className="user-avatar">{userInitial}</div>
+              <div className="dropdown-container">
+                <button className="dropdown-button">Hi, {user?.name?.split(' ')[0]}</button>
+                <div className="dropdown-content">
+                  <button onClick={handleLogout}>Logout</button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="desktop-auth-buttons">
+              <Link to="/login" className="nav-button-desktop login">Login</Link>
+              <Link to="/register" className="nav-button-desktop register">Get Started</Link>
+            </div>
+          )}
+        </div>
 
       </div>
     </nav>

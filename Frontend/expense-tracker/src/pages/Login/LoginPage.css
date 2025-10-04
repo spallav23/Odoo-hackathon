@@ -1,0 +1,176 @@
+/* --- THEME & GLOBAL STYLES (from landing page for consistency) --- */
+:root {
+  --primary-blue: #4a90e2;
+  --dark-blue: #0d253f;
+  --teal-accent: #50e3c2;
+  --text-primary: #1f2937;
+  --text-white:#fff;
+  --text-secondary: #6b7280;
+  --bg-light: #f9fafb;
+  --border-color: #e5e7eb;
+}
+
+/* --- MAIN LAYOUT --- */
+.login-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  background-color: var(--bg-light);
+}
+
+/* --- BRANDING PANEL (Right side on desktop) --- */
+.branding-panel {
+  background: linear-gradient(160deg, var(--dark-blue) 0%, #1e3a5f 100%);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  animation: slideInFromRight 1s ease-out forwards;
+}
+
+.branding-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.branding-content .logo {
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 4px 10px rgba(80, 227, 194, 0.3));
+}
+
+.branding-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.branding-content p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* --- LOGIN PANEL (Left side on desktop) --- */
+.login-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  animation: slideInFromLeft 1s ease-out forwards;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-form-container h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2.5rem;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 12px 12px 40px; /* Left padding for icon */
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.login-button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-blue);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+}
+
+.login-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+.extra-links {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.extra-links a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.extra-links a:hover {
+  text-decoration: underline;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes slideInFromLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInFromRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+
+/* --- RESPONSIVE STYLES --- */
+@media (max-width: 900px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .branding-panel {
+    display: none; /* Hide the branding panel on smaller screens for a more focused experience */
+  }
+
+  .login-panel {
+    /* Center form on mobile */
+    align-items: flex-start;
+    padding-top: 5rem;
+  }
+}

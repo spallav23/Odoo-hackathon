@@ -1,0 +1,112 @@
+/* --- Base Styles (unchanged) --- */
+.notification-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+.notification-popup {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  border-top: 4px solid; /* Base for the colored top border */
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: fadeInSlideUp 0.4s 0.1s forwards;
+}
+
+.notification-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1rem;
+}
+
+.notification-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.notification-message {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.notification-close-btn {
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* --- Modifier Classes for Notification Types --- */
+
+/* Success - Green */
+.notification-popup--success {
+  border-color: #2ecc71;
+}
+.notification-popup--success .notification-icon {
+  color: #2ecc71;
+}
+.notification-popup--success .notification-close-btn {
+  background-color: #2ecc71;
+}
+.notification-popup--success .notification-close-btn:hover {
+  background-color: #27ae60;
+}
+
+/* Warning - Orange */
+.notification-popup--warning {
+  border-color: #f39c12;
+}
+.notification-popup--warning .notification-icon {
+  color: #f39c12;
+}
+.notification-popup--warning .notification-close-btn {
+  background-color: #f39c12;
+}
+.notification-popup--warning .notification-close-btn:hover {
+  background-color: #e67e22;
+}
+
+/* Error - Red */
+.notification-popup--error {
+  border-color: #e74c3c;
+}
+.notification-popup--error .notification-icon {
+  color: #e74c3c;
+}
+.notification-popup--error .notification-close-btn {
+  background-color: #e74c3c;
+}
+.notification-popup--error .notification-close-btn:hover {
+  background-color: #c0392b;
+}
+
+
+/* --- Animations & Responsive (unchanged) --- */
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes fadeInSlideUp { to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 600px) {
+  .notification-popup { padding: 1.5rem; }
+  .notification-title { font-size: 1.25rem; }
+}

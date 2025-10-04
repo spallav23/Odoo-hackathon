@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 class Company(models.Model):
     name = models.CharField(max_length=255)
     default_currency = models.CharField(max_length=3)
+    country = models.CharField(max_length=100, default="India")
     created_at = models.DateTimeField(auto_now_add=True)
 
 
