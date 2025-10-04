@@ -3,6 +3,8 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.serializers import ModelSerializer, CharField
+from rest_framework.permissions import AllowAny
+from django.db.models import Sum
 from django.contrib.auth import get_user_model
 
 from .models import User, Company, Expense, ApprovalStep, EmployeeManager
@@ -11,9 +13,32 @@ from .serializers import (
     CompanySerializer,
     ExpenseSerializer,
     EmployeeManagerSerializer,
+    CreateCompanyAdminSerializer
 )
 from .permissions import IsAdmin, IsManager, IsEmployee
 
+from rest_framework.views import APIView
+
+class CreateCompanyAdminView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        serializer = CreateCompanyAdminSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        result = serializer.save()
+        return Response({
+            "company": {
+                "id": result["company"].id,
+                "name": result["company"].name,
+                "country": result["company"].country,
+                "currency": result["company"].default_currency
+            },
+            "admin_user": {
+                "id": result["admin_user"].id,
+                "username": result["admin_user"].username,
+                "email": result["admin_user"].email,
+                "role": result["admin_user"].role
+            }
+        }, status=status.HTTP_201_CREATED)
 
 # -------------------
 # User, Company, EmployeeManager
@@ -27,7 +52,12 @@ class UserViewSet(viewsets.ModelViewSet):
         if user.role == "admin":
             return User.objects.filter(company=user.company)
         return User.objects.none()
-
+    @action(detail=False, methods=["get"], permission_classes=[IsAuthenticated])
+    def company_users(self, request):
+        """Return all users (and their roles) in the current user's company."""
+        user = request.user
+        users = User.objects.filter(company=user.company).values("id", "username", "email", "role")
+        return Response(users)
 
 class CompanyViewSet(viewsets.ModelViewSet):
     serializer_class = CompanySerializer
@@ -80,11 +110,9 @@ class ExpenseViewSet(viewsets.ModelViewSet):
                     expense=expense, approver=em.manager, sequence=i + 1
                 )
             expense.current_approver = managers.first().manager
-            expense.save()
         else:
-            expense.status = "approved"
-            expense.current_approver = None
-            expense.save()
+            expense.current_approver = None  # keep status pending instead of auto-approving
+        expense.save()
 
     @action(detail=True, methods=["post"])
     def approve(self, request, pk=None):
@@ -142,7 +170,7 @@ class ExpenseViewSet(viewsets.ModelViewSet):
             queryset = expenses
             if status:
                 queryset = queryset.filter(status=status)
-            return queryset.aggregate(total=sum("amount"))["total"] or 0
+            return queryset.aggregate(total=Sum("amount"))["total"] or 0
 
         data = {
             "total": f"₹{total_amount():,.2f}",

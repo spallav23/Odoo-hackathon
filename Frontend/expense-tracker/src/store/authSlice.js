@@ -1,15 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
+import apiCliant from '../utils/api'
 
 
-const getUserFromToken = (token) => {
+const getUserFromToken = async(token,email) => {
     if (!token) return null;
-    
-    return {
-        name: 'Priya Kumar',
-        email: 'priya.kumar@innovateinc.com',
-        role: 'Admin', 
-    };
+    try{
+      const responce =apiCliant.get('/api/users/company_users/');
+      console.log(responce);
+      return  responce.data.find(u => u.email === email);
+      
+    }
+    catch(e){
+      console.log(e);
+      return null;
+      
+    }
+
 };
 
 const initialState = {
@@ -25,14 +32,18 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state, action) => {
+      console.log(action.payload);
+      
       const { token } = action.payload;
       state.token = token;
       state.isAuthenticated = true;
-      state.user = getUserFromToken(token);
+      state.user = getUserFromToken(token,action.payload.email);
       state.isLoading = false;
-      state.role=getUserFromToken(token);
+      state.role=getUserFromToken(token,action.payload.email);
+      state.email=action.payload.email
      
       Cookies.set('authToken', token, { expires: 7, secure: true, sameSite: 'strict' });
+      Cookies.set('email', state.email, { expires: 7, secure: true, sameSite: 'strict' });
     },
     logout: (state) => {
       state.token = null;
@@ -43,11 +54,12 @@ const authSlice = createSlice({
     },
     initializeAuth: (state) => {
         const token = Cookies.get('authToken');
+        const email = Cookies.get('email');
         if (token) {
             state.token = token;
             state.isAuthenticated = true;
-            state.user = getUserFromToken(token);
-            state.role = getUserFromToken(token);
+            state.user = getUserFromToken(token,email);
+            state.role = getUserFromToken(token,email);
         }
         state.isLoading = false; 
     }

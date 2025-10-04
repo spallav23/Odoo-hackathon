@@ -4,10 +4,8 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { initializeAuth } from './store/authSlice.js';
 import './index.css'
-import App from './App.jsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import MainLayout from './layouts/Main-layout.jsx'
-import LoginLayout from './layouts/Login-layout.jsx'
 import NotFoundPage from './components/404/NotFoundPage.jsx'
 import NotificationPopup from './components/NotificationPopup/NotificationPopup.jsx'
 import LandingPage from './pages/LandingPage/LandingPage.jsx';

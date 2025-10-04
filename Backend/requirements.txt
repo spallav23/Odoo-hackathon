@@ -1,23 +1,26 @@
-# Django framework
-django==5.2.7
+# Core
+Django>=4.2,<5.0
+djangorestframework>=3.14,<4.0
 
-# Django REST Framework
-djangorestframework==3.20.0
+# JWT authentication (compatible with Python 3.10+)
+djangorestframework-simplejwt==5.5.1
 
-# MySQL connector
-mysqlclient==2.3.1
-
-# JWT Authentication
-djangorestframework-simplejwt==5.2.1
+# Database
+# mysqlclient>=2.1,<3.0
+# pytz>=2023.3,<2024.0
+# sqlparse>=0.4.4,<1.0
 
 # Environment variables
-python-dotenv==1.1.1
+python-dotenv>=1.0,<2.0
 
-# HTTP requests for external APIs (country/currency)
-requests==2.31.0
+# Deployment / servers
+gunicorn>=20.1,<22.0
+whitenoise>=6.5,<7.0
 
-# CORS headers for React frontend integration
-django-cors-headers==4.3.0
+# Utilities
+requests>=2.31,<3.0
+coverage>=7.3,<8.0
+pytest>=8.2,<9.0
 
-# DRF Filtering
-django-filter==23.2
+# Optional: CORS handling
+django-cors-headers>=4.3,<5.0

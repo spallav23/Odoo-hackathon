@@ -5,8 +5,9 @@ import { Navigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { showNotification } from '../../store/uiSlice';
 import './RegisterPage.css';
+import { loginSuccess } from '../../store/authSlice';
+import apiClient from '../../utils/api'
 
-// Reusable component for each step's progress indicator
 const ProgressStep = ({ stepNumber, label, isActive }) => (
   <div className={`progress-step ${isActive ? 'active' : ''}`}>
     <div className="step-circle">{stepNumber}</div>
@@ -18,7 +19,7 @@ const RegisterPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     companyName: '',
-    country: 'India', // Default to India as per location
+    country: 'India', 
     currency: 'INR',
     adminName: '',
     adminEmail: '',
@@ -33,7 +34,6 @@ const RegisterPage = () => {
   };
 
   const nextStep = () => {
-    // Add validation logic here before proceeding
     setCurrentStep((prev) => prev + 1);
   };
 
@@ -41,12 +41,26 @@ const RegisterPage = () => {
     setCurrentStep((prev) => prev - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log('Submitting Registration:', formData);
-    // Add API call for registration here
-    // On success, navigate to login or dashboard
-    navigate('/login');
+    try {
+      const response = await apiClient.post('/api/create-company-admin/', {
+        formData
+      });
+
+      const token = response.data.access; 
+
+      if (token) {
+        const email = formData.adminEmail
+        dispatch(loginSuccess({ token,email }));
+        dispatch(showNotification({ type: 'success', message: 'Register successful! Welcome.' }));
+        navigate('/dashboard');
+      }
+
+    } catch (error) {
+      console.error("Register failed:", error);
+      dispatch(showNotification({ type: 'error', message: 'Register failed. Please Try again latter.' }));
+    }
   };
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
     if (isLoading) {
@@ -55,7 +69,7 @@ const RegisterPage = () => {
     if (isAuthenticated) {
       dispatch(showNotification({
         type: 'success',
-        message: 'Alread Loged in',
+        message: 'Alread Register in',
       }));
       
       return <Navigate to="/dashboard" replace />;
@@ -67,8 +81,6 @@ const RegisterPage = () => {
           <h1>Set Up Your Company</h1>
           <p>Join thousands of businesses streamlining their expenses.</p>
         </div>
-
-        {/* --- Progress Bar --- */}
         <div className="progress-bar">
           <ProgressStep stepNumber={1} label="Company" isActive={currentStep >= 1} />
           <div className={`progress-line ${currentStep > 1 ? 'active' : ''}`}></div>
@@ -76,10 +88,7 @@ const RegisterPage = () => {
            <div className={`progress-line ${currentStep > 2 ? 'active' : ''}`}></div>
           <ProgressStep stepNumber={3} label="Review" isActive={currentStep >= 3} />
         </div>
-
-        {/* --- Form Steps --- */}
         <form onSubmit={handleSubmit}>
-          {/* Step 1: Company Details */}
           <div className={`form-step ${currentStep === 1 ? 'active' : ''}`}>
             <h2>Company Details</h2>
             <div className="input-group">
@@ -100,8 +109,6 @@ const RegisterPage = () => {
               <button type="button" className="next-button" onClick={nextStep}>Next: Create Admin</button>
             </div>
           </div>
-
-          {/* Step 2: Admin Information */}
           <div className={`form-step ${currentStep === 2 ? 'active' : ''}`}>
             <h2>Your Admin Account</h2>
              <div className="input-group">
@@ -121,8 +128,6 @@ const RegisterPage = () => {
               <button type="button" className="next-button" onClick={nextStep}>Next: Review</button>
             </div>
           </div>
-
-          {/* Step 3: Final Review */}
           <div className={`form-step ${currentStep === 3 ? 'active' : ''}`}>
              <h2>Review Your Details</h2>
              <div className="review-details">

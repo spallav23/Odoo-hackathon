@@ -33,13 +33,24 @@ const DashboardPage = () => {
   const [userRole, setUserRole] = useState('manager'); 
   const [pendingApprovals, setpendingApprovals] = useState([])
   const [recentExpenses, setrecentExpenses] = useState([])
+  const [userStats, setuserStats] = useState( {
+  total: null,
+  approved:null,
+  pending: null,
+  rejected: null
+})
    const { isLoading ,user,role} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const loaddata =async()=>{
     try {
     const response = await apiClient.get('/api/expenses/');
-    // setpendingApprovals(response.data);
-    // setrecentExpenses(response.data);
+    setpendingApprovals(response.data);
+    setrecentExpenses(response.data);
+    const state = await apiClient.get('/api/expenses/stats/');
+    if(state?.data?.total){
+      setuserStats(state.data);
+    }
+    
   } catch (error) {
     console.error("Failed to submit expense:", error);
     const errorMessage = error.response?.data?.detail || 'An unexpected error occurred.';
@@ -49,6 +60,8 @@ const DashboardPage = () => {
   }
   useEffect(() => {
     setUserRole(role);
+    console.log(role);
+    
     loaddata();
   }, [isLoading])
   

@@ -30,14 +30,14 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       const response = await apiClient.post('/api/token/', {
-        username:"Pallav", 
+        username:"leo", 
         password, 
       });
 
       const token = response.data.access; 
 
       if (token) {
-        dispatch(loginSuccess({ token }));
+        dispatch(loginSuccess({ token,email }));
         dispatch(showNotification({ type: 'success', message: 'Login successful! Welcome.' }));
         navigate('/dashboard');
       }
@@ -104,8 +104,8 @@ const LoginPage = () => {
             </button>
           </form>
           <div className="extra-links">
-            <Link to="#">Forgot password?</Link>
-            <Link to="#">Contact Admin</Link>
+            <Link to="reset">Forgot password?</Link>
+            <Link to="mailto:abc.admin@company.com">Contact Admin</Link>
           </div>
         </div>
       </div>
