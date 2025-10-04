@@ -132,6 +132,30 @@ class ExpenseViewSet(viewsets.ModelViewSet):
         expense.current_approver = None
         expense.save()
         return Response({"detail": "Rejected successfully"})
+    
+    @action(detail=False, methods=["get"], permission_classes=[IsAuthenticated])
+    def stats(self, request):
+        user = request.user
+        expenses = Expense.objects.filter(employee=user)
+
+        def total_amount(status=None):
+            queryset = expenses
+            if status:
+                queryset = queryset.filter(status=status)
+            return queryset.aggregate(total=sum("amount"))["total"] or 0
+
+        data = {
+            "total": f"₹{total_amount():,.2f}",
+            "approved": f"₹{total_amount('approved'):,.2f}",
+            "pending": f"₹{total_amount('pending'):,.2f}",
+            "rejected": f"₹{total_amount('rejected'):,.2f}",
+        }
+
+        return Response(data)
+
+    
+
+    
 
 
 # -------------------
