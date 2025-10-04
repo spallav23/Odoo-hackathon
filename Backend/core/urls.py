@@ -8,6 +8,7 @@ from .views import (
     SignupView,
 )
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from .view.forgot_views import admin_send_password
 
 # Create router and register all viewsets
 router = DefaultRouter()
@@ -25,4 +26,5 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # Signup endpoint (admin only)
     path("api/signup/", SignupView.as_view(), name="signup"),
+    path("admin-send-password/", admin_send_password, name="admin_send_password"),
 ]
