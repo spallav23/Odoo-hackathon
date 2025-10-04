@@ -28,15 +28,17 @@ SECRET_KEY = "django-insecure-%4wai5yeod6*ig5oz^ox6@!c273@mb5xibq8tbf-)!p*42q@9#
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'bc19c707868d.ngrok-free.app'  # <-- Add this line
+    '*'
+    # 'localhost',
+    # '127.0.0.1',
+    # 'bc19c707868d.ngrok-free.app'  # <-- Add this line
 ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -152,3 +155,8 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS =['ngrok-skip-browser-warning']
