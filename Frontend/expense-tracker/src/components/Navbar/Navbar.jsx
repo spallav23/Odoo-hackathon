@@ -46,13 +46,8 @@ const Navbar = () => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/reports" className="nav-link" onClick={closeMenu}>
-              Reports
-            </NavLink>
-          </li>
-          <li className="nav-item">
-            <NavLink to="/settings" className="nav-link" onClick={closeMenu}>
-              Settings
+            <NavLink to="/admin" className="nav-link" onClick={closeMenu}>
+              Admin
             </NavLink>
           </li>
            <li className="nav-item-mobile">

@@ -1,0 +1,201 @@
+/* --- THEME & GLOBAL STYLES (reusing from dashboard) --- */
+:root {
+  --primary-blue: #4a90e2;
+  --dark-blue: #0d253f;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --bg-main: #f4f7fa;
+  --bg-card: #ffffff;
+  --border-color: #e5e7eb;
+  --success: #10b981;
+}
+
+/* --- MAIN LAYOUT --- */
+.add-expense-page {
+  padding: 2rem;
+  background-color: var(--bg-main);
+  animation: fadeIn 0.6s ease-out;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem;
+}
+
+.page-header p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.expense-form-container {
+  background: var(--bg-card);
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* --- FORM GRID & INPUTS --- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+/* Making description span full width */
+.description-group {
+    grid-column: 1 / -1;
+}
+
+.input-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+/* Specific styling for amount input with currency dropdown */
+.amount-input {
+    display: flex;
+}
+.amount-input input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+.amount-input select {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    width: auto;
+    background-color: #f9fafb;
+}
+
+/* --- RECEIPT UPLOAD SECTION --- */
+.upload-section {
+    margin-bottom: 2rem;
+}
+.upload-section label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  display: block;
+}
+.drop-zone {
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.drop-zone:hover {
+  background-color: #f9fafb;
+  border-color: var(--primary-blue);
+}
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.upload-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+.upload-prompt svg {
+  color: var(--primary-blue);
+}
+.upload-hint {
+  font-size: 0.8rem;
+}
+.receipt-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+/* --- FORM ACTIONS --- */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.form-actions button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.submit-button {
+  background-color: var(--primary-blue);
+  color: white;
+  box-shadow: 0 4px 15px rgba(74, 144, 226, 0.2);
+}
+.submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3);
+}
+.cancel-button {
+  background-color: var(--border-color);
+  color: var(--text-secondary);
+}
+.cancel-button:hover {
+  background-color: #d1d5db;
+}
+
+/* --- RESPONSIVE STYLES --- */
+@media (max-width: 768px) {
+  .add-expense-page {
+    padding: 1rem;
+  }
+  .expense-form-container {
+    padding: 1.5rem;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

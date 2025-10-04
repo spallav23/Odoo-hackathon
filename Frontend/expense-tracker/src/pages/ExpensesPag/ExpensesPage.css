@@ -1,0 +1,162 @@
+/* --- THEME & GLOBAL STYLES --- */
+:root {
+  --primary-blue: #4a90e2;
+  --teal-accent: #50e3c2;
+  --dark-blue: #0d253f;
+  --text-primary: #ffffff;
+  --text-secondary: #adb5bd;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --hover-bg: rgba(255, 255, 255, 0.15);
+}
+
+/* --- MAIN LAYOUT & NEW BACKGROUND --- */
+.expenses-page-new {
+  padding: 2rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0d253f 0%, #01040f 100%);
+  color: var(--text-primary);
+  animation: fadeIn 0.6s ease-out;
+}
+
+.page-header h1 {
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+/* --- GLASSMORPHISM EFFECT --- */
+.glass-effect {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  padding: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* --- CHARTS GRID & CARDS --- */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.chart-card h3 {
+  font-size: 1.25rem;
+  margin: 0 0 1.5rem 0;
+  font-weight: 600;
+}
+
+/* Recharts Customization for Dark Theme */
+.recharts-legend-item-text {
+  color: var(--text-secondary) !important;
+}
+.recharts-tooltip-label {
+  color: var(--text-secondary) !important;
+}
+.recharts-cartesian-axis-tick-value {
+  fill: var(--text-secondary) !important;
+}
+.recharts-text {
+    fill: var(--text-secondary) !important;
+}
+
+
+/* --- TABLE SECTION --- */
+.table-section h3 {
+  font-size: 1.25rem;
+  margin: 0 0 1.5rem 0;
+  font-weight: 600;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.expenses-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.expenses-table th, .expenses-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.expenses-table th {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.expenses-table th svg {
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+.expenses-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+.expenses-table tbody tr:hover {
+    background-color: var(--hover-bg);
+}
+
+/* --- KEYFRAME ANIMATIONS --- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- RESPONSIVE STYLES --- */
+@media (max-width: 1024px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 768px) {
+    .expenses-page-new {
+        padding: 1rem;
+    }
+    .glass-effect {
+        padding: 1.5rem;
+    }
+}
+
+/* --- DEMO ROLE SWITCHER (Same style, but on new background) --- */
+.role-switcher {
+  background: rgba(0,0,0,0.2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--glass-border);
+}
+.role-switcher button {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.role-switcher button.active, .role-switcher button:hover {
+  background: var(--primary-blue);
+  color: white;
+}
+

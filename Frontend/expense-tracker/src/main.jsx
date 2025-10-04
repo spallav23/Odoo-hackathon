@@ -9,8 +9,14 @@ import MainLayout from './layouts/Main-layout.jsx'
 import LoginLayout from './layouts/Login-layout.jsx'
 import NotFoundPage from './components/404/NotFoundPage.jsx'
 import NotificationPopup from './components/NotificationPopup/NotificationPopup.jsx'
-import LandingPage from './pages/LandingPage.jsx';
-
+import LandingPage from './pages/LandingPage/LandingPage.jsx';
+import LoginPage from './pages/Login/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage/RegisterPage.jsx';
+import ResetPasswordPage from './pages/ForgotPasswordPage/ForgotPasswordPage.jsx';
+import DashboardPage from './pages/DashboardPage/DashboardPage.jsx';
+import AddExpensePage from './pages/AddExpensePage/AddExpensePage.jsx';
+import AdminPage from './pages/AdminPage/AdminPage.jsx';
+import ExpensesPage from './pages/ExpensesPag/ExpensesPage.jsx';
 const router = createBrowserRouter([
   {
     path:'/',
@@ -22,13 +28,37 @@ const router = createBrowserRouter([
       },
       {
         path:'login',
-        element:<LoginLayout/>,
-        children:[
-          {
-            index:true,
-            element:<App/>
-          }
-        ]
+        element:<LoginPage/>
+        
+      },
+      {
+        path:'register',
+        element:<RegisterPage/>
+        
+      },
+      {
+        path:'reset',
+        element:<ResetPasswordPage/>
+        
+      },
+      {
+        path:'dashboard',
+        element:<DashboardPage/>
+        
+      },
+      {
+        path:'add-expense',
+        element:<AddExpensePage/>
+        
+      },
+      {
+        path:'expenses',
+        element:<ExpensesPage/>
+        
+      },
+      {
+        path:'admin',
+        element:<AdminPage/>
         
       },
       {
